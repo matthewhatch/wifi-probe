@@ -1,3 +1,5 @@
 from wifi import Cell, Scheme
 
-list(Cell.all('wlan0'))
+networks = list(Cell.all('wlan0'))
+
+print(networks)
