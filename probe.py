@@ -3,4 +3,5 @@ from wifi import Cell, Scheme
 networks = list(Cell.all('wlan0'))
 
 for net in networks:
-    print(net)
+    print(net.ssid)
+    print(net.quality)
