@@ -15,7 +15,7 @@ typeList = list()
 headings = ['ssid','quality','frequency','signal','mode','address','type'];
 tab.header(headings)
 
-while(True:
+while(True):
     os.system('clear')
     networks = list(Cell.all('wlan0'))
     for net in networks:
