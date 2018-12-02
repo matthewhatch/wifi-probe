@@ -35,3 +35,4 @@ while(True):
 
     wifi_table = tab.draw()
     print(wifi_table)
+    time.sleep(5)
