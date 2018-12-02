@@ -1,6 +1,6 @@
 from wifi import Cell, Scheme
 
 networks = list(Cell.all('wlan0'))
-print('ssid:\tquality')
+print('ssid\tquality')
 for net in networks:
-    print("#{net.ssid}\t #{net.quality}")
+    print(f'{net.ssid}\t {net.quality}')
