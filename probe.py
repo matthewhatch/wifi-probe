@@ -26,8 +26,9 @@ for net in networks:
     addressList.append(net.address)
     typeList.append(enc_type)
 
-for row in zip(ssidList, qualityList, frequencyList, signalList, modeList, addressList, typeList):
-    tab.add_row(row)
-    
+# for row in zip(ssidList, qualityList, frequencyList, signalList, modeList, addressList, typeList):
+#     tab.add_row(row)
+tab.add_rows([ssidList, qualityList, frequencyList, signalList, modeList, addressList, typeList])
+
 wifi_table = tab.draw()
 print(wifi_table)
