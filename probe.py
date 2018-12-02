@@ -3,21 +3,25 @@ import texttable as tt
 import os
 import time
 
-# set up the table
-tab = tt.Texttable()
-ssidList = list()
-qualityList = list()
-frequencyList = list()
-signalList = list()
-modeList = list()
-addressList = list()
-typeList = list()
+
 
 headings = ['ssid','quality','frequency','signal','mode','address','type'];
 tab.header(headings)
 
 while(True):
     os.system('clear')
+    
+    # set up the table
+    tab = tt.Texttable()
+    ssidList = list()
+    qualityList = list()
+    frequencyList = list()
+    signalList = list()
+    modeList = list()
+    addressList = list()
+    typeList = list()
+
+
     networks = list(Cell.all('wlan0'))
     for net in networks:
         enc_type = net.encryption_type if net.encrypted else 'open'
