@@ -1,6 +1,7 @@
 from wifi import Cell, Scheme
 import texttable as tt
 import os
+import time
 
 # set up the table
 tab = tt.Texttable()
