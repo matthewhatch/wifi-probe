@@ -3,16 +3,14 @@ import texttable as tt
 import os
 import time
 
-
-
 headings = ['ssid','quality','frequency','signal','mode','address','type'];
+tab = tt.Texttable()
 tab.header(headings)
 
 while(True):
     os.system('clear')
-    
-    # set up the table
-    tab = tt.Texttable()
+
+    # set up the tabl
     ssidList = list()
     qualityList = list()
     frequencyList = list()
