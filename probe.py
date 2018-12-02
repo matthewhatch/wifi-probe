@@ -10,18 +10,17 @@ tab.header(headings)
 while(True):
     os.system('clear')
 
-    # set up the tabl
-    ssidList = list()
-    qualityList = list()
-    frequencyList = list()
-    signalList = list()
-    modeList = list()
-    addressList = list()
-    typeList = list()
-
-
     networks = list(Cell.all('wlan0'))
     for net in networks:
+        # set up the tabl
+        ssidList = list()
+        qualityList = list()
+        frequencyList = list()
+        signalList = list()
+        modeList = list()
+        addressList = list()
+        typeList = list()
+        
         enc_type = net.encryption_type if net.encrypted else 'open'
         # print(net.ssid, net.quality, net.frequency, net.signal, net.mode, net.address, enc_type)
         ssidList.append(net.ssid)
