@@ -5,8 +5,9 @@ import time
 while(True):
     print("\033c")
     headings = ['ssid','quality','frequency','signal','mode','address','type'];
-    tab = tt.Texttable()
-    tab.header(headings)
+    table = tt.Texttable()
+    table.set_deco(Texttable.HEADER)
+    table.header(headings)
 
     networks = list(Cell.all('wlan0'))
     for net in networks:
@@ -20,7 +21,7 @@ while(True):
         typeList = list()
 
         enc_type = net.encryption_type if net.encrypted else 'open'
-        
+
         ssidList.append(net.ssid)
         qualityList.append(net.quality)
         frequencyList.append(net.frequency)
@@ -30,9 +31,9 @@ while(True):
         typeList.append(enc_type)
 
         for row in zip(ssidList, qualityList, frequencyList, signalList, modeList, addressList, typeList):
-            tab.add_row(row)
+            table.add_row(row)
 
-    wifi_table = tab.draw()
+    wifi_table = table.draw()
     print(wifi_table)
 
     time.sleep(5)
