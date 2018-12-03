@@ -1,6 +1,6 @@
 from wifi import Cell, Scheme
 import texttable as tt
-import os
+import sys
 import time
 
 while(True):
@@ -33,7 +33,7 @@ while(True):
         for row in zip(ssidList, qualityList, frequencyList, signalList, modeList, addressList, typeList):
             tab.add_row(row)
 
-
     wifi_table = tab.draw()
-    print(wifi_table)
+    sys.stdout(wifi_table)
+    sys.stdout.flush()
     time.sleep(5)
