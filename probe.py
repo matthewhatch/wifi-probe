@@ -20,7 +20,7 @@ while(True):
         modeList = list()
         addressList = list()
         typeList = list()
-        
+
         enc_type = net.encryption_type if net.encrypted else 'open'
         # print(net.ssid, net.quality, net.frequency, net.signal, net.mode, net.address, enc_type)
         ssidList.append(net.ssid)
@@ -31,8 +31,8 @@ while(True):
         addressList.append(net.address)
         typeList.append(enc_type)
 
-    for row in zip(ssidList, qualityList, frequencyList, signalList, modeList, addressList, typeList):
-        tab.add_row(row)
+        for row in zip(ssidList, qualityList, frequencyList, signalList, modeList, addressList, typeList):
+            tab.add_row(row)
 
 
     wifi_table = tab.draw()
