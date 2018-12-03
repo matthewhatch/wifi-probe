@@ -4,7 +4,7 @@ import sys
 import time
 
 while(True):
-    os.system('clear')
+    sys.stdout.flush()
     headings = ['ssid','quality','frequency','signal','mode','address','type'];
     tab = tt.Texttable()
     tab.header(headings)
@@ -35,5 +35,5 @@ while(True):
 
     wifi_table = tab.draw()
     sys.stdout(wifi_table)
-    sys.stdout.flush()
+
     time.sleep(5)
