@@ -34,6 +34,6 @@ while(True):
             tab.add_row(row)
 
     wifi_table = tab.draw()
-    sys.stdout(wifi_table)
+    print(wifi_table)
 
     time.sleep(5)
