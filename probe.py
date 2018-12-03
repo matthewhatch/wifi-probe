@@ -3,12 +3,11 @@ import texttable as tt
 import os
 import time
 
-headings = ['ssid','quality','frequency','signal','mode','address','type'];
-tab = tt.Texttable()
-tab.header(headings)
-
 while(True):
     os.system('clear')
+    headings = ['ssid','quality','frequency','signal','mode','address','type'];
+    tab = tt.Texttable()
+    tab.header(headings)
 
     networks = list(Cell.all('wlan0'))
     for net in networks:
