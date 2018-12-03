@@ -6,7 +6,7 @@ while(True):
     print("\033c")
     headings = ['ssid','quality','frequency','signal','mode','address','type'];
     table = tt.Texttable()
-    table.set_deco(Texttable.HEADER)
+    table.set_deco(2)
     table.header(headings)
 
     networks = list(Cell.all('wlan0'))
