@@ -1,10 +1,9 @@
 from wifi import Cell, Scheme
 import texttable as tt
-import sys
 import time
 
 while(True):
-    sys.stdout.flush()
+    print("\033c")
     headings = ['ssid','quality','frequency','signal','mode','address','type'];
     tab = tt.Texttable()
     tab.header(headings)
@@ -21,7 +20,7 @@ while(True):
         typeList = list()
 
         enc_type = net.encryption_type if net.encrypted else 'open'
-        # print(net.ssid, net.quality, net.frequency, net.signal, net.mode, net.address, enc_type)
+        
         ssidList.append(net.ssid)
         qualityList.append(net.quality)
         frequencyList.append(net.frequency)
