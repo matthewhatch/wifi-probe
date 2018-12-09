@@ -36,6 +36,7 @@ def findSSID(pkt):
            if ssid == '' or pkt.getlayer(Dot11Elt).ID != 0:
                print("Hidden Network Detected")
            print("Network Detected: %s - %d networks found" % (display_ssid, len(F_bssids)))
+
            lcd.clear()
            lcd.message("SSID: %s\nTotal: %d" % (display_ssid, len(F_bssids)))
 
