@@ -19,7 +19,7 @@ def findSSID(pkt):
            ssid = pkt.getlayer(Dot11Elt).info
            if ssid == '' or pkt.getlayer(Dot11Elt).ID != 0:
                print("Hidden Network Detected")
-           print("Network Detected: %s" % (ssid))
+           print("Network Detected: %s - %d" % (ssid, len(F_bssids)))
 
 if __name__ == "__main__":
     interface = "wlan1mon"
