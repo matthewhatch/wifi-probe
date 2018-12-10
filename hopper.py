@@ -15,6 +15,7 @@ lcd_columns = 16
 lcd_rows    = 2
 lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7,
                            lcd_columns, lcd_rows, lcd_backlight)
+lcd.autoscroll = True
 
 def hopper(iface):
     n = 1
@@ -39,6 +40,11 @@ def findSSID(pkt):
            print(pkt.getlayer(Dot11Elt))
            lcd.clear()
            lcd.message("SSID: %s\nTotal: %d" % (display_ssid, len(F_bssids)))
+def _stop(e):
+    stop = len(F_bssids) == 40
+    if stop:
+        lcd.message(' **')
+        return stop
 
 if __name__ == "__main__":
     interface = "wlan1mon"
@@ -46,4 +52,6 @@ if __name__ == "__main__":
     thread.daemon = True
     thread.start()
 
-    sniff(iface=interface, prn=findSSID)
+    sniff(iface=interface, prn=findSSID, stop_filter=_stop)
+    lcd.clear()
+    lcd.message('Done Collecting') 
