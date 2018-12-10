@@ -28,6 +28,7 @@ def hopper(iface):
 
 F_bssids = []    # Found BSSIDs
 F_unsecure = []    # Founds SSIDs
+
 def findSSID(pkt):
     if pkt.haslayer(Dot11Beacon):
        if pkt.getlayer(Dot11).addr2 not in F_bssids:
@@ -43,14 +44,12 @@ def findSSID(pkt):
                lcd.clear()
                lcd.message('Insecure Network\nDetected!')
                time.sleep(1)
-               # lcd.message('wep/opn detected\n%s' % (display_ssid))
-               # lcd.message("%s/%s\nt:%d u:%d" % (display_ssid, ' / '.join(crypto), len(F_bssids), len(F_unsecure)))
 
            lcd.clear()
            lcd.message('Total Found: %d\nInsecure: %d' % (len(F_bssids), len(F_unsecure)))
 
 def _stop(e):
-    stop = len(F_bssids) == 50
+    stop = len(F_bssids) == 34
     if stop:
         lcd.message(' **')
         return stop
@@ -72,11 +71,3 @@ def getEncryptionType(pkt):
         else:
             crypto.add("OPN")
     return crypto
-
-if __name__ == "__main__":
-    interface = "wlan1mon"
-    thread = threading.Thread(target=hopper, args=(interface, ), name="hopper")
-    thread.daemon = True
-    thread.start()
-
-    sniff(iface=interface, prn=findSSID, stop_filter=_stop, filter='Dot11')
