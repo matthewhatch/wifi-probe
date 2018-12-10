@@ -15,7 +15,6 @@ lcd_columns = 16
 lcd_rows    = 2
 lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7,
                            lcd_columns, lcd_rows, lcd_backlight)
-lcd.autoscroll = True
 
 def hopper(iface):
     n = 1
@@ -28,39 +27,51 @@ def hopper(iface):
             n = dig
 
 F_bssids = []    # Found BSSIDs
-F_ssids = []    # Founds SSIDs
+F_unsecure = []    # Founds SSIDs
 def findSSID(pkt):
     if pkt.haslayer(Dot11Beacon):
        if pkt.getlayer(Dot11).addr2 not in F_bssids:
            F_bssids.append(pkt.getlayer(Dot11).addr2)
-
            ssid = pkt.getlayer(Dot11Elt).info
            display_ssid = str(ssid).strip('b').strip("'")
+           crypto = getEncryptionType(pkt)
+           print("Network Detected: %s %s - %d networks found" % (display_ssid, ' / '.join(crypto), len(F_bssids)))
+           if 'WEP' in crypto or 'OPN' in crypto:
+               F_unsecure.append(display_ssid)
+               if ssid == '' or pkt.getlayer(Dot11Elt).ID != 0:
+                   print("Hidden Network Detected")
+               lcd.clear()
+               lcd.message('Insecure Network\nDetected!')
+               time.sleep(1)
+               # lcd.message('wep/opn detected\n%s' % (display_ssid))
+               # lcd.message("%s/%s\nt:%d u:%d" % (display_ssid, ' / '.join(crypto), len(F_bssids), len(F_unsecure)))
 
-           F_ssids.append(display_ssid)
-           if ssid == '' or pkt.getlayer(Dot11Elt).ID != 0:
-               print("Hidden Network Detected")
-           print("Network Detected: %s - %d networks found" % (display_ssid, len(F_bssids)))
-           print(pkt.getlayer(Dot11Elt))
            lcd.clear()
-           lcd.message("SSID: %s\nTotal: %d" % (display_ssid, len(F_bssids)))
+           lcd.message('Total Found: %d\nInsecure: %d' % (len(F_bssids), len(F_unsecure)))
+
 def _stop(e):
-    stop = len(F_bssids) == 20
+    stop = len(F_bssids) == 50
     if stop:
         lcd.message(' **')
         return stop
 
-def displayFinding():
-    lcd.clear()
-    lcd.message('Done Collecting')
-    time.sleep(2)
-    lcd.clear()
-    lcd.message('Show Findings...')
-
-    for id in F_ssids:
-        time.sleep(2)
-        lcd.clear()
-        lcd.message('SSID:\n%s' % (id))
+def getEncryptionType(pkt):
+    p = pkt[Dot11Elt]
+    cap = pkt.sprintf("{Dot11Beacon:%Dot11Beacon.cap%}"
+                      "{Dot11ProbeResp:%Dot11ProbeResp.cap%}").split('+')
+    crypto = set()
+    while isinstance(p, Dot11Elt):
+        if p.ID == 48:
+            crypto.add("WPA2")
+        elif p.ID == 221 and str(p.info).startswith('\x00P\xf2\x01\x01\x00'):
+            crypto.add("WPA")
+        p = p.payload
+    if not crypto:
+        if 'privacy' in cap:
+            crypto.add("WEP")
+        else:
+            crypto.add("OPN")
+    return crypto
 
 if __name__ == "__main__":
     interface = "wlan1mon"
@@ -69,4 +80,3 @@ if __name__ == "__main__":
     thread.start()
 
     sniff(iface=interface, prn=findSSID, stop_filter=_stop, filter='Dot11')
-    displayFinding()
