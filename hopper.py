@@ -28,12 +28,16 @@ def hopper(iface):
             n = dig
 
 F_bssids = []    # Found BSSIDs
+F_ssids = []    # Founds SSIDs
 def findSSID(pkt):
     if pkt.haslayer(Dot11Beacon):
        if pkt.getlayer(Dot11).addr2 not in F_bssids:
            F_bssids.append(pkt.getlayer(Dot11).addr2)
+
            ssid = pkt.getlayer(Dot11Elt).info
            display_ssid = str(ssid).strip('b').strip("'")
+
+           F_ssids.append(display_ssid)
            if ssid == '' or pkt.getlayer(Dot11Elt).ID != 0:
                print("Hidden Network Detected")
            print("Network Detected: %s - %d networks found" % (display_ssid, len(F_bssids)))
@@ -41,10 +45,22 @@ def findSSID(pkt):
            lcd.clear()
            lcd.message("SSID: %s\nTotal: %d" % (display_ssid, len(F_bssids)))
 def _stop(e):
-    stop = len(F_bssids) == 40
+    stop = len(F_bssids) == 20
     if stop:
         lcd.message(' **')
         return stop
+
+def displayFinding():
+    lcd.clear()
+    lcd.message('Done Collecting')
+    time.sleep(2)
+    lcd.clear()
+    lcd.message('Show Findings...')
+
+    for id in F_ssids:
+        time.sleep(2)
+        lcd.clear()
+        lcd.message('SSID:\n%s' % (id))
 
 if __name__ == "__main__":
     interface = "wlan1mon"
@@ -52,6 +68,5 @@ if __name__ == "__main__":
     thread.daemon = True
     thread.start()
 
-    sniff(iface=interface, prn=findSSID, stop_filter=_stop)
-    lcd.clear()
-    lcd.message('Done Collecting') 
+    sniff(iface=interface, prn=findSSID, stop_filter=_stop, filter='Dot11')
+    displayFinding()
