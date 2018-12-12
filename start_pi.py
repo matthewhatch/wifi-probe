@@ -49,7 +49,7 @@ def lcdPrint(message):
     lcd.message(message)
     if len(message) > 16:
         for i in range(len(message)):
-            time.sleep(0.1)
+            time.sleep(0.25)
             lcd.move_left()
 
 
