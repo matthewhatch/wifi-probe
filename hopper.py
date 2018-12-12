@@ -32,6 +32,7 @@ F_unsecure = []    # Founds SSIDs
 def findSSID(pkt):
     if pkt.haslayer(Dot11Beacon):
        if pkt.getlayer(Dot11).addr2 not in F_bssids:
+           print(dir(pkt.getLayer(Dot11)))
            F_bssids.append(pkt.getlayer(Dot11).addr2)
            ssid = pkt.getlayer(Dot11Elt).info
            display_ssid = str(ssid).strip('b').strip("'")

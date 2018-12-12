@@ -86,10 +86,6 @@ def startMonitor(interface):
     time.sleep(2)
     return True
 
-def startHopper():
-    command = '/home/pi/code/wifi-probe/hopper.py'
-    subprocess.run(['python3', command], stdout=subprocess.PIPE)
-    return True
 
 if __name__ == "__main__":
     startPi()
