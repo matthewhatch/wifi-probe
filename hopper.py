@@ -35,9 +35,10 @@ def findSSID(pkt):
        if pkt.getlayer(Dot11).addr2 not in F_bssids:
            F_bssids.append(pkt.getlayer(Dot11).addr2)
            ssid = pkt.getlayer(Dot11Elt).info
+           signal_strength = getSignalStrength(pkt)
            display_ssid = str(ssid).strip('b').strip("'")
            crypto = getEncryptionType(pkt)
-           print("Network Detected: %s %s - %d networks found" % (display_ssid, ' / '.join(crypto), len(F_bssids)))
+           print("Network Detected: %s %s %s" % (display_ssid, ' / '.join(crypto), signal_strength))
            if 'WEP' in crypto or 'OPN' in crypto:
                F_unsecure.append(display_ssid)
                if ssid == '' or pkt.getlayer(Dot11Elt).ID != 0:
@@ -75,3 +76,7 @@ def getEncryptionType(pkt):
         else:
             crypto.add("OPN")
     return crypto
+
+def getSignalStrength(pkt):
+    radio_tap = pkt.getLayer(RadioTap)
+    return -ord(pkt.notdecoded[-4:-3])

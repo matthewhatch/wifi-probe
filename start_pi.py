@@ -101,4 +101,4 @@ if __name__ == "__main__":
     thread.daemon = True
     thread.start()
 
-    sniff(iface=interface, prn=hopper.findSSID, stop_filter=hopper._stop, filter='Dot11')
+    sniff(iface=interface, prn=hopper.findSSID, stop_filter=hopper._stop)
