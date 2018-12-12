@@ -1,6 +1,7 @@
 import threading, os, time, random
 import Adafruit_CharLCD as LCD
 from scapy.all import *
+import json
 
 # Raspberry Pi pin configuration:
 lcd_rs        = 25  # Note this might need to be changed to 21 for older revision Pi's.
@@ -49,7 +50,10 @@ def findSSID(pkt):
            lcd.message('Total Found: %d\nInsecure: %d' % (len(F_bssids), len(F_unsecure)))
 
 def _stop(e):
-    stop = len(F_bssids) == 34
+    with open('config.json') as c:
+        config = json.load(c)
+
+    stop = len(F_bssids) == config.totalCount
     if stop:
         lcd.message(' **')
         return stop

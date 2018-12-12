@@ -5,6 +5,7 @@ import subprocess
 import hopper
 from scapy.all import *
 import os
+import json
 
 # Raspberry Pi pin configuration:
 lcd_rs        = 25  # Note this might need to be changed to 21 for older revision Pi's.
@@ -22,11 +23,11 @@ lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7,
 
 interface = str()
 
-def startPi():
+def startPi(config):
     i=0
     started = False
-    message = 'Starting Wifi Hopper.'
-    lcd.message('Pi Scanner\n97x The Future...')
+    message = config.welcomeMessage
+    lcd.message(config.welcomeMessage)
     time.sleep(5)
     lcd.clear()
     lcd.message(message)
@@ -88,8 +89,12 @@ def startMonitor(interface):
 
 
 if __name__ == "__main__":
-    startPi()
-    interface = 'wlan1'
+    # get values from configuration
+    with open('config.json') as c:
+        config = json.load(c)
+
+    startPi(config)
+    interface = config.interface
     thread = threading.Thread(target=hopper.hopper, args=(interface, ), name="hopper")
     thread.daemon = True
     thread.start()
