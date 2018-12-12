@@ -53,7 +53,7 @@ def _stop(e):
     with open('config.json') as c:
         config = json.load(c)
 
-    stop = len(F_bssids) == config.totalCount
+    stop = len(F_bssids) == config["totalCount"]
     if stop:
         lcd.message(' **')
         return stop

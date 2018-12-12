@@ -26,8 +26,8 @@ interface = str()
 def startPi(config):
     i=0
     started = False
-    message = config.welcomeMessage
-    lcd.message(config.welcomeMessage)
+    message = config["welcomeMessage"]
+    lcd.message(config["welcomeMessage"])
     time.sleep(5)
     lcd.clear()
     lcd.message(message)
@@ -94,7 +94,7 @@ if __name__ == "__main__":
         config = json.load(c)
 
     startPi(config)
-    interface = config.interface
+    interface = config["interface"]
     thread = threading.Thread(target=hopper.hopper, args=(interface, ), name="hopper")
     thread.daemon = True
     thread.start()
