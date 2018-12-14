@@ -30,7 +30,7 @@ def startPi(config):
     lcd.message(config["welcomeMessage"])
     time.sleep(5)
     lcd.clear()
-    lcd.message(message)
+    lcd.message('starting')
     while started != True:
         lcd.message('.')
         if i < 4:
@@ -41,7 +41,7 @@ def startPi(config):
             lcdPrint(message)
         started = isMonitor('wlan%d' % (i-1))
         time.sleep(.5)
-    lcd.clear()
+    #lcd.clear()
     interface = 'wlan%d' % (i-1)
     startMonitor(interface)
     return interface
@@ -62,12 +62,12 @@ def isMonitor(int):
     # 9c:ef:d5:fc:32:84
     # run cat /sys/class/net/wlan1/address
     command = '/sys/class/net/%s/address' % (int)
-    lcdPrint('Checking %s' % (int))
+    lcd.message('.')
     result = subprocess.run(['cat', command], stdout=subprocess.PIPE).stdout
     macaddress = str(result).strip('b').strip("'")
 
     if macaddress[:17] == '9c:ef:d5:fc:32:84':
-        lcdPrint('Found interface')
+        lcd.message('.')
         interface = int
         return True
     else:
@@ -78,13 +78,13 @@ def startMonitor(interface):
     down = 'ifconfig %s down' % interface
     monitorMode = 'iwconfig %s mode monitor' % interface
 
-    lcdPrint('Shutting Down %s' % interface)
+    lcd.message('.')
     os.popen(down)
     time.sleep(2)
-    lcdPrint('Changing %s to Monitor' % interface)
+    lcd.message('.')
     os.popen(monitorMode)
     time.sleep(2)
-    lcdPrint('Restoring %s' % interface)
+    lcd.message('.')
     os.popen(up)
     time.sleep(2)
     return True

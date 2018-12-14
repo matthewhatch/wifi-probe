@@ -78,5 +78,6 @@ def getEncryptionType(pkt):
     return crypto
 
 def getSignalStrength(pkt):
-    radio_tap = pkt.getLayer(RadioTap)
-    return -ord(pkt.notdecoded[-4:-3])
+    if pkt.haslayer(RadioTap):
+        radio_tap = pkt.getlayer(RadioTap)
+        return -(256-ord(pkt.notdecoded[-4:-3]))
