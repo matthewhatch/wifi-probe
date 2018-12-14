@@ -42,7 +42,9 @@ def startPi(config):
         started = isMonitor('wlan%d' % (i-1))
         time.sleep(.5)
     lcd.clear()
-    startMonitor('wlan%d' % (i-1))
+    interface = 'wlan%d' % (i-1)
+    startMonitor(interface)
+    return interface
 
 def lcdPrint(message):
 
@@ -89,12 +91,12 @@ def startMonitor(interface):
 
 
 if __name__ == "__main__":
-    # get values from configuration
-    with open('config.json') as c:
+    with open('/home/pi/code/wifi-probe/config.json') as c:
         config = json.load(c)
 
-    startPi(config)
-    interface = config["interface"]
+    interface = startPi(config)
+
+    interface = interface
     thread = threading.Thread(target=hopper.hopper, args=(interface, ), name="hopper")
     thread.daemon = True
     thread.start()

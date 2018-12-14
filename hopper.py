@@ -50,7 +50,7 @@ def findSSID(pkt):
            lcd.message('Total Found: %d\nInsecure: %d' % (len(F_bssids), len(F_unsecure)))
 
 def _stop(e):
-    with open('config.json') as c:
+    with open('/home/pi/code/wifi-probe/config.json') as c:
         config = json.load(c)
 
     stop = len(F_bssids) == config["totalCount"]
