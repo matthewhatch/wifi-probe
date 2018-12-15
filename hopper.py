@@ -34,11 +34,13 @@ def findSSID(pkt):
     if pkt.haslayer(Dot11Beacon):
        if pkt.getlayer(Dot11).addr2 not in F_bssids:
            F_bssids.append(pkt.getlayer(Dot11).addr2)
+           bssid = pkt.getlayer(Dot11).addr2
            ssid = pkt.getlayer(Dot11Elt).info
            signal_strength = getSignalStrength(pkt)
+           # distance = getDistance(signal_strength)
            display_ssid = str(ssid).strip('b').strip("'")
            crypto = getEncryptionType(pkt)
-           print("Network Detected: %s %s %s" % (display_ssid, ' / '.join(crypto), signal_strength))
+           print("Network Detected: %s %s %s %s" % (display_ssid, ' / '.join(crypto), signal_strength, bssid))
            if 'WEP' in crypto or 'OPN' in crypto:
                F_unsecure.append(display_ssid)
                if ssid == '' or pkt.getlayer(Dot11Elt).ID != 0:
@@ -81,3 +83,6 @@ def getSignalStrength(pkt):
     if pkt.haslayer(RadioTap):
         radio_tap = pkt.getlayer(RadioTap)
         return -(256-ord(pkt.notdecoded[-4:-3]))
+
+def getDistance(db):
+    return pow(10., (-34. -(db))/(10*4))
