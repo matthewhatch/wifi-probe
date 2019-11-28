@@ -18,6 +18,8 @@ lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7,
                            lcd_columns, lcd_rows, lcd_backlight)
 
 def hopper(iface):
+    # currently hard coding the channel to 1
+    # TODO: hop channels
     n = 1
     stop_hopper = False
     while not stop_hopper:
@@ -36,11 +38,11 @@ def findSSID(pkt):
            F_bssids.append(pkt.getlayer(Dot11).addr2)
            bssid = pkt.getlayer(Dot11).addr2
            ssid = pkt.getlayer(Dot11Elt).info
-           signal_strength = getSignalStrength(pkt)
+           # signal_strength = getSignalStrength(pkt)
            # distance = getDistance(signal_strength)
            display_ssid = str(ssid).strip('b').strip("'")
            crypto = getEncryptionType(pkt)
-           print("Network Detected: %s %s %s %s" % (display_ssid, ' / '.join(crypto), signal_strength, bssid))
+           print("Network Detected: %s %s %s" % (display_ssid, ' / '.join(crypto), bssid))
            if 'WEP' in crypto or 'OPN' in crypto:
                F_unsecure.append(display_ssid)
                if ssid == '' or pkt.getlayer(Dot11Elt).ID != 0:

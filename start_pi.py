@@ -27,12 +27,14 @@ def startPi(config):
     i=0
     started = False
     message = config["welcomeMessage"]
+    print(message, end = '')
     lcd.message(config["welcomeMessage"])
     time.sleep(5)
     lcd.clear()
     lcd.message('starting')
     while started != True:
         lcd.message('.')
+        print('.', end = '')
         if i < 4:
             i += 1
         else:
@@ -41,7 +43,8 @@ def startPi(config):
             lcdPrint(message)
         started = isMonitor('wlan%d' % (i-1))
         time.sleep(.5)
-    #lcd.clear()
+    lcd.clear()
+    print('')
     interface = 'wlan%d' % (i-1)
     startMonitor(interface)
     return interface
